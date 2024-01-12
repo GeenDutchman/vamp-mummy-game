@@ -60,7 +60,7 @@ void initVamps(int diff, vector<Creature *> &creatures, vector<Location *> &theM
   cout << endl;
   for (int i = 0; i <= diff; i++)
   {
-    if (creatures[i] == NULL && i % 3 == 0)
+    if (creatures[i] == NULL && i != 0 && i % 3 == 0)
     {
       creatures[i] = new Mummy();
     }
