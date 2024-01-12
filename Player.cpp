@@ -1,4 +1,4 @@
-//this is Player.cpp
+// this is Player.cpp
 #include "Player.h"
 
 #include <string>
@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Player::Player():Creature()
+Player::Player() : Creature()
 {
   Location defaultValues;
   defaultValues.setComment(Player::COMMENT);
@@ -23,64 +23,70 @@ Player::Player():Creature()
 }
 
 Player::~Player()
-{}
+{
+}
 
-Player::Player(int x, int y):Creature(x, y, Player::FILL, Player::MOHS, Player::COMMENT)
+Player::Player(int x, int y) : Creature(x, y, Player::FILL, Player::MOHS, Player::COMMENT)
 {
   return;
 }
 
-Player::Player(int x, int y, bool compAI):Creature(x, y, Player::FILL, Player::MOHS, Player::COMMENT)
+Player::Player(int x, int y, bool compAI) : Creature(x, y, Player::FILL, Player::MOHS, Player::COMMENT)
 {
   this->CPU = compAI;
   this->level = 0;
   return;
 }
 
-void Player::initCreature(vector<Location*> & theMap, int ROWS, int COLS)
+void Player::initCreature(vector<Location *> &theMap, int ROWS, int COLS)
 {
   this->level = 0;
   this->setCreatureOnMap(theMap, ROWS, COLS);
   return;
 }
 
-int Player::getMove(vector<Location*> & theMap, int COLS, Location* target)
+int Player::getMove(vector<Location *> &theMap, int COLS, Location *target)
 {
-  //int wasdOPT = 0;
+  // int wasdOPT = 0;
   char traslated = 'V';
-  do{
-    //wasdOPT = getchar();
+  do
+  {
+    // wasdOPT = getchar();
     cin >> traslated;
-  }while((traslated < 'a')&&(traslated > 'z'));
-  
+  } while ((traslated < 'a') && (traslated > 'z'));
+
   traslated = toupper(traslated);
-  //traslated = toupper((char)wasdOPT);
-  //putchar(traslated);
-  switch(traslated)
-    {
-    case 'W':
-      this->moveUp(theMap, COLS);
-      break;
-    case 'A':
-      this->moveLeft(theMap, COLS);
-      break;
-    case 'S':
-      this->moveDown(theMap, COLS);
-      break;
-    case 'D':
-      this->moveRight(theMap, COLS);
-      break;
-    case 'Q':
-      //valid for quit
-      break;
-    default:
-      cout << "\nBad Entry\n";
-      cout << traslated << "," << endl;
-      break;
-    }
+  // traslated = toupper((char)wasdOPT);
+  // putchar(traslated);
+  switch (traslated)
+  {
+  case 'W':
+    this->moveUp(theMap, COLS);
+    break;
+  case 'A':
+    this->moveLeft(theMap, COLS);
+    break;
+  case 'S':
+    this->moveDown(theMap, COLS);
+    break;
+  case 'D':
+    this->moveRight(theMap, COLS);
+    break;
+  case 'Q':
+    // valid for quit
+    break;
+  default:
+    cout << "\nBad Entry\n";
+    cout << traslated << "," << endl;
+    break;
+  }
   return traslated;
 }
 
+int Player::getMovesPerTurn()
+{
+  return 1;
+}
 
 bool Player::getCPU()
 {
