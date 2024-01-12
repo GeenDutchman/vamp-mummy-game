@@ -92,6 +92,16 @@ int Creature::getMovesPerTurn()
   return 1;
 }
 
+int Creature::backMohs()
+{
+  return 0;
+}
+
+string Creature::backFill()
+{
+  return " ";
+}
+
 void Creature::moveUp(vector<Location *> &theMap, int COLS)
 {
   //(int x, int y, int COLS)
@@ -100,8 +110,8 @@ void Creature::moveUp(vector<Location *> &theMap, int COLS)
   {
     theMap[idexToBe]->setFill(this->spot.getFill());
     theMap[idexToBe]->setMohs(this->spot.getMohs());
-    theMap[idexToBe + COLS]->setFill(" ");
-    theMap[idexToBe + COLS]->setMohs(0);
+    theMap[idexToBe + COLS]->setFill(this->backFill());
+    theMap[idexToBe + COLS]->setMohs(this->backMohs());
     this->spot.setYCoord(this->spot.getYCoord() - 1);
   }
   else
@@ -119,8 +129,8 @@ void Creature::moveDown(vector<Location *> &theMap, int COLS)
   {
     theMap[idexToBe]->setFill(this->spot.getFill());
     theMap[idexToBe]->setMohs(this->spot.getMohs());
-    theMap[idexToBe - COLS]->setFill(" ");
-    theMap[idexToBe - COLS]->setMohs(0);
+    theMap[idexToBe - COLS]->setFill(this->backFill());
+    theMap[idexToBe - COLS]->setMohs(this->backMohs());
     this->spot.setYCoord(this->spot.getYCoord() + 1);
   }
   else
@@ -137,8 +147,8 @@ void Creature::moveLeft(vector<Location *> &theMap, int COLS)
   {
     theMap[idexToBe]->setFill(this->spot.getFill());
     theMap[idexToBe]->setMohs(this->spot.getMohs());
-    theMap[idexToBe + 1]->setFill(" ");
-    theMap[idexToBe + 1]->setMohs(0);
+    theMap[idexToBe + 1]->setFill(this->backFill());
+    theMap[idexToBe + 1]->setMohs(this->backMohs());
     this->spot.setXCoord(this->spot.getXCoord() - 1);
   }
   else
@@ -155,8 +165,8 @@ void Creature::moveRight(vector<Location *> &theMap, int COLS)
   {
     theMap[idexToBe]->setFill(this->spot.getFill());
     theMap[idexToBe]->setMohs(this->spot.getMohs());
-    theMap[idexToBe - 1]->setFill(" ");
-    theMap[idexToBe - 1]->setMohs(0);
+    theMap[idexToBe - 1]->setFill(this->backFill());
+    theMap[idexToBe - 1]->setMohs(this->backMohs());
     this->spot.setXCoord(this->spot.getXCoord() + 1);
   }
   else
