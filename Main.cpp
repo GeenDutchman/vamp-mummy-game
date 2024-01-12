@@ -1,11 +1,8 @@
 #include "Location.h"
-// #include "Location.cpp"
 #include "Creature.h"
-// #include "Creature.cpp"
 #include "Player.h"
 #include "Vampire.h"
-// #include "Player.cpp"
-// #include "Vampire.cpp"
+#include "Mummy.h"
 
 #include <iostream>
 #include <string>
@@ -13,8 +10,6 @@
 #include <ctime>
 #include <cstdlib>
 #include <vector>
-// #include <allegro.h>
-// #include
 
 using namespace std;
 
@@ -54,23 +49,27 @@ bool getFlashlight()
   return false;
 }
 
-void initVamps(int diff, vector<Vampire *> &allVamps, vector<Location *> &theMap, int ROWS, int COLS)
+void initVamps(int diff, vector<Creature *> &creatures, vector<Location *> &theMap, int ROWS, int COLS)
 {
   srand(time(0));
   // vector<Location*> allVamps;
-  while (allVamps.size() < (unsigned int)diff + 1)
+  while (creatures.size() < (unsigned int)diff + 1)
   {
-    allVamps.push_back((Vampire *)NULL);
+    creatures.push_back((Creature *)NULL);
   }
   cout << endl;
   for (int i = 0; i <= diff; i++)
   {
-    if (allVamps[i] == NULL)
+    if (creatures[i] == NULL && i % 3 == 0)
     {
-      allVamps[i] = new Vampire();
+      creatures[i] = new Mummy();
+    }
+    else if (creatures[i] == NULL)
+    {
+      creatures[i] = new Vampire();
       //	  allVamps[i]->initCreature(theMap, ROWS, COLS);
     }
-    allVamps[i]->initCreature(theMap, ROWS, COLS);
+    creatures[i]->initCreature(theMap, ROWS, COLS);
   }
   return;
 }
@@ -104,7 +103,7 @@ vector<Location *> initMap(int ROWS, int COLS, int dense)
   return aMap;
 }
 
-void displayMap(vector<Location *> theMap, vector<Vampire *> vamps, Player *player, Location *goal, int ROWS, int COLS, bool flashlight)
+void displayMap(vector<Location *> theMap, vector<Creature *> creatures, Player *player, Location *goal, int ROWS, int COLS, bool flashlight)
 {
   const int offset = 4;
   Location tempLocation;
@@ -113,9 +112,9 @@ void displayMap(vector<Location *> theMap, vector<Vampire *> vamps, Player *play
   tempLocation = player->getSpot();
   theMap[tempLocation.XYtoIdex(COLS)]->setFill(tempLocation.getFill());
   // cout << vamps.size() - 1 << endl;
-  for (unsigned int j = 0; j < vamps.size(); j++)
+  for (unsigned int j = 0; j < creatures.size(); j++)
   {
-    tempLocation = vamps[j]->getSpot();
+    tempLocation = creatures[j]->getSpot();
     theMap[tempLocation.XYtoIdex(COLS)]->setFill(tempLocation.getFill());
   }
   tempLocation = player->getSpot();
@@ -195,12 +194,12 @@ void displayMap(vector<Location *> theMap, vector<Vampire *> vamps, Player *play
   return;
 }
 
-bool checkEnimies(vector<Location *> theMap, int COLS, Player *thePlayer, vector<Vampire *> theVamps)
+bool checkEnimies(vector<Location *> theMap, int COLS, Player *thePlayer, vector<Creature *> creatures)
 {
   bool collision = false;
-  for (unsigned int i = 0; i < theVamps.size(); i++)
+  for (unsigned int i = 0; i < creatures.size(); i++)
   {
-    if (theVamps[i]->getSpot().XYtoIdex(COLS) == thePlayer->getSpot().XYtoIdex(COLS))
+    if (creatures[i]->getSpot().XYtoIdex(COLS) == thePlayer->getSpot().XYtoIdex(COLS))
     {
       collision = true;
     }
@@ -221,7 +220,7 @@ int main()
 {
   const int ROWS = 30, COLS = 90;
   vector<Location *> theMap = {NULL};
-  vector<Vampire *> theVamps = {NULL};
+  vector<Creature *> theEnemies = {NULL};
   Location *goalPtr = new Location(-1, -1, "@", 1, "GOAL!");
   Player *thePlayer = new Player();
   int dense = 0, diff = 0, movee = 0;
@@ -236,18 +235,18 @@ int main()
     theMap = initMap(ROWS, COLS, dense);
     system("pause");
     diff = thePlayer->getLevel();
-    initVamps(diff, theVamps, theMap, ROWS, COLS);
+    initVamps(diff, theEnemies, theMap, ROWS, COLS);
     thePlayer->initCreature(theMap, ROWS, COLS);
     goalPtr->setOnMap(theMap, ROWS, COLS);
     do
     {
-      displayMap(theMap, theVamps, thePlayer, goalPtr, ROWS, COLS, flash);
+      displayMap(theMap, theEnemies, thePlayer, goalPtr, ROWS, COLS, flash);
       movee = thePlayer->getMove(theMap, COLS, goalPtr);
-      for (unsigned int i = 0; i < theVamps.size(); i++)
+      for (unsigned int i = 0; i < theEnemies.size(); i++)
       {
-        theVamps[i]->getMove(theMap, COLS, thePlayer->getSpotP());
+        theEnemies[i]->getMove(theMap, COLS, thePlayer->getSpotP());
       }
-      if (checkEnimies(theMap, COLS, thePlayer, theVamps))
+      if (checkEnimies(theMap, COLS, thePlayer, theEnemies))
       {
         win = -1;
       }
@@ -256,7 +255,7 @@ int main()
         win = 1;
       }
     } while ((movee != 'Q') && (!win));
-    displayMap(theMap, theVamps, thePlayer, goalPtr, ROWS, COLS, flash);
+    displayMap(theMap, theEnemies, thePlayer, goalPtr, ROWS, COLS, flash);
     if (win > 0)
     {
       cout << "\nYou have WON!!\n";
