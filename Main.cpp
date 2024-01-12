@@ -242,7 +242,7 @@ int main()
     do
     {
       displayMap(theMap, theVamps, thePlayer, goalPtr, ROWS, COLS, flash);
-      movee = thePlayer->getMove(theMap, COLS, NULL);
+      movee = thePlayer->getMove(theMap, COLS, goalPtr);
       for (unsigned int i = 0; i < theVamps.size(); i++)
       {
         theVamps[i]->getMove(theMap, COLS, thePlayer->getSpotP());
