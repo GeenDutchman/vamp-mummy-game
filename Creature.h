@@ -14,7 +14,7 @@ class Creature
 public:
   Creature();
   Creature(int x, int y, string fill, int mohs, string comment);
-  virtual int getMove(vector<Location *> &theMap, int COLS, Location *target) = 0;
+  virtual int getMove(vector<Location *> &theMap, int COLS, Location *target);
   virtual int getMovesPerTurn();
   void moveUp(vector<Location *> &theMap, int COLS);
   void moveDown(vector<Location *> &theMap, int COLS);

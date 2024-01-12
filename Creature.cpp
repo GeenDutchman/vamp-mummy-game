@@ -24,6 +24,69 @@ void Creature::setCreatureOnMap(vector<Location *> &theMap, int ROWS, int COLS)
   return;
 }
 
+int Creature::getMove(vector<Location *> &theMap, int COLS, Location *target)
+{
+  enum BINI
+  {
+    first = 1,
+    second = 2,
+    third = 4,
+    fourth = 8
+  };
+  const int moves = this->getMovesPerTurn();
+  for (char i = 0; i < moves; i++)
+  {
+    if (!(this->getSpot().compareXY(target)))
+    {
+      int targX = target->getXCoord();
+      int targY = target->getYCoord();
+      int vX = this->getSpot().getXCoord();
+      int vY = this->getSpot().getYCoord();
+      unsigned char decide = 0;
+      if (vX != targX)
+      {
+        decide += first;
+      }
+      if (vY != targY)
+      {
+        decide += second;
+      }
+
+      switch (decide)
+      {
+      case 3:
+        // int randy = (rand() % second) + first;//one means horz
+        decide = (rand() % second) + first; // one means horz
+      default:
+        if (decide == second)
+        {
+          if (targY < vY)
+          {
+            this->moveUp(theMap, COLS);
+          }
+          else if (targY > vY)
+          {
+            this->moveDown(theMap, COLS);
+          }
+        }
+        else if (decide == first)
+        {
+          if (targX < vX)
+          {
+            this->moveLeft(theMap, COLS);
+          }
+          else if (targX > vX)
+          {
+            this->moveRight(theMap, COLS);
+          }
+        }
+        break;
+      }
+    }
+  }
+  return 1;
+}
+
 int Creature::getMovesPerTurn()
 {
   return 1;
